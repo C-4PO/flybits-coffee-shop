@@ -1,4 +1,4 @@
-# flybits-coffee-shop
+# Flybits Coffee Shop
 
 > A simple point-of-sale (POS) application for a coffee shop like Starbucks
 

@@ -2,4 +2,5 @@ html, body, #app-main {
   height: 100%;
 }
 
+@import './bootstrap/stylesheets/bootstrap';
 @import '../components/home/home';

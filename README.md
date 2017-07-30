@@ -140,8 +140,6 @@ Split into 4 sections
     
 ####Shopping Cart (optional for multiple drinks)
    
-
-
 ## References
 
 [Vue Cli Starter Code](https://www.google.com)

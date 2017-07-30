@@ -1,0 +1,5 @@
+div.menu-tabs {
+  height: 45px; }
+
+div.menu-list {
+  height: calc(100% - 45px); }

@@ -1,0 +1,8 @@
+.list-wrapper {
+  height: 100%; }
+
+.list {
+  height: 100%;
+  overflow-y: scroll; }
+  .list li {
+    min-height: 75px; }

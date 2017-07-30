@@ -1,6 +1,33 @@
+* {
+  box-sizing: border-box;
+}
+
 html, body, #app-main {
   height: 100%;
 }
 
+// My Variaible
+
+$gutter : 15px;
+
+// Bootstrap Styles and Mixins
 @import 'bootstrap';
-@import '../../components/home/home';
+
+// Home View Styles
+@import './../../components/home/home.scss';
+
+// Drinks View Styles
+@import './../../components/drinks/drinks.scss';
+@import './../../components/menu/menu.scss';
+@import './../../components/tabs/tabs.scss';
+@import './../../components/list/list.scss';
+@import './../../components/selection/selection.scss';
+@import './../../components/display/display.scss';
+
+// Purchase View Styles
+@import './../../components/purchase/purchase.scss';
+
+// Exit View Styles
+@import './../../components/exit/exit.scss';
+
+

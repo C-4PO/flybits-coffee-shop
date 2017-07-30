@@ -7,7 +7,6 @@ import { Link } from './link';
 })
 export class NavbarComponent extends Vue {
 
-
     inverted: boolean = true; // default value
 
     object: { default: string } = { default: 'Default object property!' }; // objects as default values don't need to be wrapped into functions

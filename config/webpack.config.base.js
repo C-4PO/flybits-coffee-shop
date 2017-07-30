@@ -26,7 +26,7 @@ let config = {
   plugins: [
     new CopyWebpackPlugin([
       {from: 'src/assets', to: '../assets'},
-      {from: 'src/css', to: '../css'}
+      {from: 'src/assets/stylesheets', to: '../css'}
     ]),
   ]
 };

@@ -21,6 +21,8 @@ export default class SelectionComponent extends Vue {
   get selectedIngredients(): Array<IListable> {
     return ingredientStore.readIngredients(this.$store).filter((_ing: IIngredientInstance): boolean => {
       return _ing.isSelected;
+    }).sort((i1: IIngredientInstance, i2: IIngredientInstance): number => {
+      return i2.ingredient.type - i1.ingredient.type;
     });
   }
 

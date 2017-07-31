@@ -8,8 +8,8 @@ import ListComponent from './../list/list';
 // Store
 import * as ingredientStore from './../../store/ingredients';
 import { IIngredientInstance } from './../../store/ingredients/ingredientsState';
+import { IngredientType } from './../../store/ingredients/ingredientsState';
 import { IListable } from './../../store/shared/sharedState';
-
 
 @Component({
   template: require('./menu.html'),
@@ -28,8 +28,12 @@ export default class MenuComponent extends Vue {
     // Could get groups from a more complex api
     return {
       'Recipe': [],
-      'Ingredients': ingredientStore.readIngredients(this.$store),
-      'AddOns' : []
+      'Ingredients': ingredientStore.readIngredients(this.$store).filter((_ing: IIngredientInstance) => {
+        return _ing.ingredient.type === IngredientType.Base;
+      }),
+      'AddOns' : ingredientStore.readIngredients(this.$store).filter((_ing: IIngredientInstance) => {
+        return _ing.ingredient.type === IngredientType.AddOn;
+      })
     };
   };
 

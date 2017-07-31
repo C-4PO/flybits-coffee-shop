@@ -40,7 +40,6 @@ export interface IIngredientInstance {
   description: string;
   style: any;
 
-
 }
 
 export class IngredientInstance implements IListable, IIngredientInstance {

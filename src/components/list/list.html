@@ -1,7 +1,12 @@
 <div class="list-wrapper">
   <div class="col-xs-12 well list">
     <ul class="list-group">
-      <li class="list-group-item" v-for="i in items">{{i.name}}</li>
+      <li class="list-group-item"
+          v-for="i in items"
+          v-bind:class="{active: i.isSelected}"
+          v-on:click="toggleSelect(i)">
+        {{i.name}}
+      </li>
     </ul>
   </div>
 </div>

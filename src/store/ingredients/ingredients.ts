@@ -7,6 +7,7 @@ import { State as RootState } from '../state';
 import {
   Ingredient,
   IIngredient,
+  IngredientType,
   IngredientInstance,
   IIngredientInstance,
   IngredientState } from './ingredientsState';
@@ -24,7 +25,7 @@ export const ingredients = {
 
   getters: {
 
-    getIngredients(state: IngredientState) {
+    getIngredients(state: IngredientState): Array<IIngredientInstance> {
       return state.ingredients;
     },
     getSelectedIngredients(state: IngredientState) {
@@ -44,9 +45,10 @@ export const ingredients = {
     },
 
     selectIngredient(state: IngredientState, _ingredient: IIngredientInstance) {
-      state.ingredients.find((_element: IIngredientInstance) => {
+      let ing = state.ingredients.find((_element: IIngredientInstance) => {
         return _element.ingredient.name === _ingredient.ingredient.name;
-      })!.isSelected = true;
+      });
+      ing!.isSelected = !(ing!.isSelected);
     }
   },
 

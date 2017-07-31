@@ -1,3 +1,5 @@
+import { IListable } from '../shared/sharedState';
+
 export enum IngredientType {
   Base, AddOn
 }
@@ -8,7 +10,7 @@ export interface IngredientStyleInterface {
 }
 
 
-export interface IngredientInterface {
+export interface IIngredient {
   name: string;
   description: string;
   priceInCAD: number;
@@ -16,7 +18,7 @@ export interface IngredientInterface {
   style: IngredientStyleInterface;
 }
 
-export class Ingredient implements IngredientInterface {
+export class Ingredient implements IIngredient {
   name: string;
   description: string;
   priceInCAD: number;
@@ -31,22 +33,40 @@ export class Ingredient implements IngredientInterface {
   }
 }
 
-export interface IngredientInBasketInterFace {
-  ingredient: IngredientInterface;
+export interface IIngredientInstance {
+  ingredient: IIngredient;
   isSelected: boolean;
+  name: string;
+  description: string;
+  style: any;
+
+
 }
 
-export class IngredientInBasket implements IngredientInBasketInterFace {
-  ingredient: IngredientInterface;
+export class IngredientInstance implements IListable, IIngredientInstance {
+  ingredient: IIngredient;
   isSelected: boolean;
 
-  constructor(_ingredient: IngredientInterface) {
+  get name() {
+    return this.ingredient.name;
+  }
+
+  get description() {
+    return this.ingredient.description;
+  }
+
+  get style() {
+    return this.ingredient.style;
+  }
+
+
+  constructor(_ingredient: IIngredient) {
     this.ingredient = _ingredient;
     this.isSelected = false;
   }
 }
 
 export interface IngredientState {
-  ingredients: Array<IngredientInBasket>;
+  ingredients: Array<IIngredientInstance>;
   totalAmount: number;
 }

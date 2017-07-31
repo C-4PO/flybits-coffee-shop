@@ -5,6 +5,12 @@ import Component from 'vue-class-component';
 import TabsComponent from './../tabs/tabs';
 import ListComponent from './../list/list';
 
+// Store
+import * as ingredientStore from './../../store/ingredients';
+import { IIngredientInstance } from './../../store/ingredients/ingredientsState';
+import { IListable } from './../../store/shared/sharedState';
+
+
 @Component({
   template: require('./menu.html'),
   components : {
@@ -15,6 +21,29 @@ import ListComponent from './../list/list';
 
 export default class MenuComponent extends Vue {
 
+  index: number = 1;
+  selectedTab: string = 'Ingredients';
 
+  get groups() {
+    // Could get groups from a more complex api
+    return {
+      'Recipe': [],
+      'Ingredients': ingredientStore.readIngredients(this.$store),
+      'AddOns' : []
+    };
+  };
+
+  get group(): Array<IListable> {
+    let selectedGroup = this.groups[this.selectedTab];
+    return selectedGroup ? selectedGroup : [];
+  }
+
+  get ingredients(): Array<IIngredientInstance> {
+    return ingredientStore.readIngredients(this.$store);
+  }
+
+  tabSwitch(tab): void {
+    this.selectedTab = tab;
+  }
 
 }

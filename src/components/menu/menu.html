@@ -2,10 +2,13 @@
   <div class="panel-wrapper">
     <div class="panel panel-default">
       <div class="menu-tabs">
-        <fbcs-tabs></fbcs-tabs>
+        <fbcs-tabs v-bind:tabs="Object.keys(groups)"
+                   v-bind:selected="selectedTab" v-on:tabClick="tabSwitch">
+
+        </fbcs-tabs>
       </div>
       <div class="menu-list">
-        <fbcs-list></fbcs-list>
+        <fbcs-list v-bind:items="group"></fbcs-list>
       </div>
     </div>
   </div>

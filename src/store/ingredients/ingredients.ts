@@ -6,9 +6,9 @@ import { getStoreAccessors } from 'vuex-typescript';
 import { State as RootState } from '../state';
 import {
   Ingredient,
-  IngredientInterface,
-  IngredientInBasket,
-  IngredientInBasketInterFace,
+  IIngredient,
+  IngredientInstance,
+  IIngredientInstance,
   IngredientState } from './ingredientsState';
 import { ingredientObjects } from './ingredientsAPI';
 
@@ -35,18 +35,16 @@ export const ingredients = {
   },
 
   mutations: {
-    addIngredients(state: IngredientState, ingredients: Array<IngredientInterface>) {
+    addIngredients(state: IngredientState, ingredients: Array<IIngredient>) {
 
       let basket = ingredients.map((_ingredient: Ingredient) => {
-        return new IngredientInBasket(_ingredient);
+        return new IngredientInstance(_ingredient);
       });
-
       state.ingredients = state.ingredients.concat(basket);
-      console.log(state.ingredients);
     },
 
-    selectIngredient(state: IngredientState, _ingredient: IngredientInBasketInterFace) {
-      state.ingredients.find((_element: IngredientInBasketInterFace) => {
+    selectIngredient(state: IngredientState, _ingredient: IIngredientInstance) {
+      state.ingredients.find((_element: IIngredientInstance) => {
         return _element.ingredient.name === _ingredient.ingredient.name;
       })!.isSelected = true;
     }
@@ -56,7 +54,7 @@ export const ingredients = {
     async retrieveIngredients(context: IngredientContext) {
       await new Promise((resolve, _) => {
         setTimeout(() => {
-          let Ingredients: Array<IngredientInterface> = ingredientObjects.map((_ing: any) => {
+          let Ingredients: Array<IIngredient> = ingredientObjects.map((_ing: any) => {
             return new Ingredient(_ing);
           });
           commitaddIngredients(context, Ingredients);

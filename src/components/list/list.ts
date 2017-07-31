@@ -1,9 +1,8 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
+import { IListable } from '../../store/shared/sharedState';
+import { Prop } from 'vue-property-decorator';
 
-// Store
-import * as ingredeints from './../../store/ingredients';
-import {IngredientInBasketInterFace} from '../../store/ingredients/ingredientsState';
 
 @Component ({
   template: require('./list.html')
@@ -11,8 +10,6 @@ import {IngredientInBasketInterFace} from '../../store/ingredients/ingredientsSt
 
 export default class ListComponent extends Vue {
 
-  get ingredients(): Array<IngredientInBasketInterFace> {
-    return ingredeints.readIngredients(this.$store);
-  }
+  @Prop items: Array<IListable>;
 
 }

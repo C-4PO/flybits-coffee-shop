@@ -29,10 +29,10 @@ export default class MenuComponent extends Vue {
     return {
       'Recipe': [],
       'Ingredients': ingredientStore.readIngredients(this.$store).filter((_ing: IIngredientInstance) => {
-        return _ing.ingredient.type === IngredientType.Base;
+        return _ing.ingredient.type === IngredientType.Base && !_ing.isSelected;
       }),
       'AddOns' : ingredientStore.readIngredients(this.$store).filter((_ing: IIngredientInstance) => {
-        return _ing.ingredient.type === IngredientType.AddOn;
+        return _ing.ingredient.type === IngredientType.AddOn && !_ing.isSelected;
       })
     };
   };

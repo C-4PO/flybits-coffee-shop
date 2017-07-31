@@ -3,7 +3,6 @@
     <ul class="list-group">
       <li class="list-group-item"
           v-for="i in items"
-          v-bind:class="{active: i.isSelected}"
           v-on:click="toggleSelect(i)">
         {{i.name}}
       </li>

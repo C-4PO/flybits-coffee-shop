@@ -3,6 +3,7 @@ import Component from 'vue-class-component';
 
 // Store
 import * as ingredeints from './../../store/ingredients';
+import {IngredientInBasketInterFace} from '../../store/ingredients/ingredientsState';
 
 @Component ({
   template: require('./list.html')
@@ -10,12 +11,7 @@ import * as ingredeints from './../../store/ingredients';
 
 export default class ListComponent extends Vue {
 
-  mounted () {
-    console.log('mounted!');
-    console.log(ingredeints.readIngredients(this.$store));
-  }
-
-  get ingredients () {
+  get ingredients(): Array<IngredientInBasketInterFace> {
     return ingredeints.readIngredients(this.$store);
   }
 

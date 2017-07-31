@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import Vuex from 'vuex';
 
 import * as Store from './store';
+import * as IngredientsStore from './store/ingredients';
 
 import { HomeComponent } from './components/home';
 import { DrinkComponent } from './components/drinks';
@@ -31,5 +32,8 @@ new Vue({
   store,
   components: {
     'navbar': NavbarComponent
+  },
+  created: function() {
+    IngredientsStore.dispatchRetrieveIngredients(this.$store);
   }
 });

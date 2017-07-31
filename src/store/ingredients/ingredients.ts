@@ -4,7 +4,13 @@
 import { ActionContext, Store } from 'vuex';
 import { getStoreAccessors } from 'vuex-typescript';
 import { State as RootState } from '../state';
-import { Ingredient, IngredientInBasket, IngredientState } from './ingredientsState';
+import {
+  Ingredient,
+  IngredientInterface,
+  IngredientInBasket,
+  IngredientInBasketInterFace,
+  IngredientState } from './ingredientsState';
+import { ingredientObjects } from './ingredientsAPI';
 
 type IngredientContext = ActionContext<IngredientState, RootState>;
 
@@ -29,26 +35,34 @@ export const ingredients = {
   },
 
   mutations: {
-    addIngredients(state: IngredientState, ingredients: Array<Ingredient>) {
+    addIngredients(state: IngredientState, ingredients: Array<IngredientInterface>) {
 
-      let ingredientsInBasket = ingredients.map((_ingredient: Ingredient) => {
+      let basket = ingredients.map((_ingredient: Ingredient) => {
         return new IngredientInBasket(_ingredient);
       });
 
-      state.ingredients = state.ingredients.concat(ingredientsInBasket);
+      state.ingredients = state.ingredients.concat(basket);
+      console.log(state.ingredients);
     },
 
-    selectIngredient(state: IngredientState, ingredient: Ingredient) {
-      state.ingredients.find((element) => {
-        return element.ingredient.name === ingredient.name;
+    selectIngredient(state: IngredientState, _ingredient: IngredientInBasketInterFace) {
+      state.ingredients.find((_element: IngredientInBasketInterFace) => {
+        return _element.ingredient.name === _ingredient.ingredient.name;
       })!.isSelected = true;
     }
   },
 
   actions: {
-    async retrieveIngredients(context: IngredientContext): Promise<void> {
-      await new Promise((resolve, _) => setTimeout(() => resolve(), 500));
-
+    async retrieveIngredients(context: IngredientContext) {
+      await new Promise((resolve, _) => {
+        setTimeout(() => {
+          let Ingredients: Array<IngredientInterface> = ingredientObjects.map((_ing: any) => {
+            return new Ingredient(_ing);
+          });
+          commitaddIngredients(context, Ingredients);
+          resolve();
+        }, 500);
+      });
     }
   }
 };
@@ -58,6 +72,8 @@ const { commit, read, dispatch } =
 
 export const readIngredients = read(ingredients.getters.getIngredients);
 export const readSelectedIngredients = read(ingredients.getters.getSelectedIngredients);
-export const dispatchRetrieveIngredients = dispatch(ingredients.actions.retrieveIngredients);
+export const commitaddIngredients = commit(ingredients.mutations.addIngredients);
 export const commitSelectIngredient = commit(ingredients.mutations.selectIngredient);
+export const dispatchRetrieveIngredients = dispatch(ingredients.actions.retrieveIngredients);
+
 

@@ -58,20 +58,42 @@ export const recipes = {
     },
 
     updateRecipeFromIngredients(state: RecipeState, _ingredients: Array<IIngredientInstance>) {
+      // Get The Ingredient Keys To Match Against Recipe
       let ingredientKeys = _ingredients.filter((_ing: IIngredientInstance) => {
-        return _ing.ingredient.type = IngredientType.Base;
+        return _ing.ingredient.type == IngredientType.Base;
       }).map((_ing: IIngredientInstance) => {
         return _ing.name
       });
 
-      // if ingredients are the same
-      if(ingredientKeys != state.current.recipe.requiredIngredients){
-        // search for another recipe
+      if(state.current) { // if current is set
+        // ingredients are the same do nothing
+        // ingredients are different search for possible current else null
+        if(ingredientKeys != state.current.recipe.requiredIngredients){
+          // search for another recipe
+          let newRecipe = state.recipes.find((_recipe: IRecipeInstance) => {
+            //  HACK : would install undescore Library
+            return JSON.stringify(_recipe.recipe.requiredIngredients) === JSON.stringify(ingredientKeys);
+          });
+          // if none set to null else add new recipe
+          state.current.isSelected = false;
+          if(newRecipe){
+            newRecipe.isSelected = true;
+            state.current = newRecipe;
+          } else {
+            state.current = null;
+          }
+        }
+      } else { // if current is not set
+        // search for possible current else still null
         let newRecipe = state.recipes.find((_recipe: IRecipeInstance) => {
-          return _recipe.recipe.requiredIngredients == ingredientKeys;
+          return JSON.stringify(_recipe.recipe.requiredIngredients) === JSON.stringify(ingredientKeys);
         });
-        // if none set to null else add new recipe
-        state.current = newRecipe ? newRecipe: null;
+        if(newRecipe){
+          newRecipe.isSelected = true;
+          state.current = newRecipe;
+        } else {
+          state.current = null;
+        }
       }
     }
   },
@@ -100,7 +122,7 @@ export const readSelectedRecipe = read(recipes.getters.getSelectedRecipe);
 export const commitaddRecipe = commit(recipes.mutations.addRecipe);
 export const commitUpdateRecipeFromIngredients = commit(recipes.mutations.updateRecipeFromIngredients);
 export const commitsetRecipes = commit(recipes.mutations.setRecipes);
-export const commitsetCurrentRecipe= commit(recipes.mutations.setCurrentRecipe);
+export const commitsetCurrentRecipe = commit(recipes.mutations.setCurrentRecipe);
 export const dispatchRetrieveRecipes = dispatch(recipes.actions.retrieveRecipes);
 
 

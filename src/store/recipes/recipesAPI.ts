@@ -1,6 +1,6 @@
 export let recipeObjects = [
   {
-    name: "skyblue-dodgerblue-dodgerblue",
+    name: "skyblue-dodgerblue-magenta",
     description: `
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris lobortis sodales dui vulputate aliquam. Nullam 
       facilisis lacus id libero consectetur venenatis. Vivamus a aliquam arcu, id elementum justo. Nullam sodales eget 
@@ -11,7 +11,7 @@ export let recipeObjects = [
       ligula rutrum sed.
   `,
     price: 5,
-    requiredIngredients :["skyblue", "dodgerblue", "dodgerblue"],
+    requiredIngredients :["skyblue", "dodgerblue", "magenta"],
     style: {
       logoUrl: "",
       color: ""

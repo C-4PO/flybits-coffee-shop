@@ -7,12 +7,10 @@ import { State as RootState } from '../state';
 import {
   Ingredient,
   IIngredient,
-  IngredientType,
-  IngredientInstance,
-  IIngredientInstance,
-  IngredientState } from './ingredientsState';
+  IngredientState
+} from './ingredientsState';
 import { ingredientObjects } from './ingredientsAPI';
-import { IRecipeInstance } from '../recipes/recipesState';
+import { IRecipe } from '../recipes/recipesState';
 
 type IngredientContext = ActionContext<IngredientState, RootState>;
 
@@ -26,11 +24,11 @@ export const ingredients = {
 
   getters: {
 
-    getIngredients(state: IngredientState): Array<IIngredientInstance> {
+    getIngredients(state: IngredientState): Array<IIngredient> {
       return state.ingredients;
     },
     getSelectedIngredients(state: IngredientState) {
-      return state.ingredients.filter((ing) => {
+      return state.ingredients.filter((ing: IIngredient): boolean => {
         return ing.isSelected;
       });
     }
@@ -39,33 +37,30 @@ export const ingredients = {
   mutations: {
     addIngredients(state: IngredientState, ingredients: Array<IIngredient>) {
 
-      let basket = ingredients.map((_ingredient: Ingredient) => {
-        return new IngredientInstance(_ingredient);
-      });
-      state.ingredients = state.ingredients.concat(basket);
+      state.ingredients = state.ingredients.concat(ingredients);
     },
 
-    setIngredientsByRecipe(state: IngredientState, recipe: IRecipeInstance) {
+    setIngredientsByRecipe(state: IngredientState, recipe: IRecipe) {
 
 
-      state.ingredients.filter((_ing: IIngredientInstance) => {
+      state.ingredients.filter((_ing: IIngredient): boolean => {
         return _ing.isSelected;
-      }).forEach((_ing: IIngredientInstance) => {
+      }).forEach((_ing: IIngredient): void => {
         _ing.isSelected = false;
       });
 
-      for (let key of recipe.recipe.requiredIngredients){
-        let ing = state.ingredients.find((_element: IIngredientInstance) => {
-          return _element.ingredient.name === key;
+      for (let key of recipe.requiredIngredients){
+        let ing = state.ingredients.find((_element: IIngredient) => {
+          return _element.name === key;
         });
         ing!.isSelected = true;
       }
 
     },
 
-    selectIngredient(state: IngredientState, _ingredient: IIngredientInstance) {
-      let ing = state.ingredients.find((_element: IIngredientInstance) => {
-        return _element.ingredient.name === _ingredient.ingredient.name;
+    selectIngredient(state: IngredientState, _ingredient: IIngredient) {
+      let ing = state.ingredients.find((_element: IIngredient) => {
+        return _element.name === _ingredient.name;
       });
       ing!.isSelected = !(ing!.isSelected);
     }
@@ -78,7 +73,7 @@ export const ingredients = {
           let Ingredients: Array<IIngredient> = ingredientObjects.map((_ing: any) => {
             return new Ingredient(_ing);
           });
-          commitaddIngredients(context, Ingredients);
+          commitAddIngredients(context, Ingredients);
           resolve();
         }, 500);
       });
@@ -91,7 +86,7 @@ const { commit, read, dispatch } =
 
 export const readIngredients = read(ingredients.getters.getIngredients);
 export const readSelectedIngredients = read(ingredients.getters.getSelectedIngredients);
-export const commitaddIngredients = commit(ingredients.mutations.addIngredients);
+export const commitAddIngredients = commit(ingredients.mutations.addIngredients);
 export const commitSetIngredientsByRecipe = commit(ingredients.mutations.setIngredientsByRecipe);
 export const commitSelectIngredient = commit(ingredients.mutations.selectIngredient);
 export const dispatchRetrieveIngredients = dispatch(ingredients.actions.retrieveIngredients);

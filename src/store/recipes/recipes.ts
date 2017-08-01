@@ -7,13 +7,12 @@ import { State as RootState } from '../state';
 import {
   Recipe,
   IRecipe,
-  IRecipeInstance,
-  RecipeInstance,
-  RecipeState } from './recipesState';
+  RecipeState
+} from './recipesState';
 import { recipeObjects } from './recipesAPI';
 import {
   IngredientType,
-  IIngredientInstance
+  IIngredient
 } from '../ingredients/ingredientsState';
 
 type RecipeContext = ActionContext<RecipeState, RootState>;
@@ -27,8 +26,7 @@ export const recipes = {
   },
 
   getters: {
-
-    getRecipes(state: RecipeState): Array<IRecipeInstance> {
+    getRecipes(state: RecipeState): Array<IRecipe> {
       return state.recipes;
     },
     getSelectedRecipe(state: RecipeState) {
@@ -38,18 +36,15 @@ export const recipes = {
 
   mutations: {
 
-    addRecipe(state: RecipeState, _recipe: IRecipeInstance ) {
+    addRecipe(state: RecipeState, _recipe: IRecipe ) {
       state.recipes.push(_recipe);
     },
 
     setRecipes(state: RecipeState, _recipes: Array<IRecipe>) {
-      let basket = _recipes.map((_rec: IRecipe) => {
-        return new RecipeInstance(_rec);
-      });
-      state.recipes = state.recipes.concat(basket);
+      state.recipes = state.recipes.concat(_recipes);
     },
 
-    setCurrentRecipe(state: RecipeState, _recipe: IRecipeInstance){
+    setCurrentRecipe(state: RecipeState, _recipe: IRecipe){
       if(state.current){
         state.current.isSelected = false;
       }
@@ -57,22 +52,22 @@ export const recipes = {
       state.current = _recipe;
     },
 
-    updateRecipeFromIngredients(state: RecipeState, _ingredients: Array<IIngredientInstance>) {
+    updateRecipeFromIngredients(state: RecipeState, _ingredients: Array<IIngredient>) {
       // Get The Ingredient Keys To Match Against Recipe
-      let ingredientKeys = _ingredients.filter((_ing: IIngredientInstance) => {
-        return _ing.ingredient.type == IngredientType.Base;
-      }).map((_ing: IIngredientInstance) => {
+      let ingredientKeys = _ingredients.filter((_ing: IIngredient) => {
+        return _ing.type == IngredientType.Base;
+      }).map((_ing: IIngredient) => {
         return _ing.name
       });
 
       if(state.current) { // if current is set
         // ingredients are the same do nothing
         // ingredients are different search for possible current else null
-        if(ingredientKeys != state.current.recipe.requiredIngredients){
+        if(ingredientKeys != state.current.requiredIngredients){
           // search for another recipe
-          let newRecipe = state.recipes.find((_recipe: IRecipeInstance) => {
+          let newRecipe = state.recipes.find((_recipe: IRecipe) => {
             //  HACK : would install undescore Library
-            return JSON.stringify(_recipe.recipe.requiredIngredients) === JSON.stringify(ingredientKeys);
+            return JSON.stringify(_recipe.requiredIngredients) === JSON.stringify(ingredientKeys);
           });
           // if none set to null else add new recipe
           state.current.isSelected = false;
@@ -85,8 +80,8 @@ export const recipes = {
         }
       } else { // if current is not set
         // search for possible current else still null
-        let newRecipe = state.recipes.find((_recipe: IRecipeInstance) => {
-          return JSON.stringify(_recipe.recipe.requiredIngredients) === JSON.stringify(ingredientKeys);
+        let newRecipe = state.recipes.find((_recipe: IRecipe) => {
+          return JSON.stringify(_recipe.requiredIngredients) === JSON.stringify(ingredientKeys);
         });
         if(newRecipe){
           newRecipe.isSelected = true;

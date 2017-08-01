@@ -3,11 +3,8 @@ import Component from 'vue-class-component';
 
 // IngredientStore
 import * as ingredientStore from './../../store/ingredients';
-import { IIngredientInstance } from './../../store/ingredients/ingredientsState';
-
 // RecipeStore
 import * as recipeStore from './../../store/recipes';
-import IRecipeInstance from './../../store/recipes/recipesState';
 
 @Component ({
   template: require('./display.html')

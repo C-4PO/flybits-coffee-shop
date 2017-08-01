@@ -55,6 +55,9 @@ export default class MenuComponent extends Vue {
       case 'AddOns':
       case 'Ingredients':
         ingredientStore.commitSelectIngredient(this.$store,item);
+        recipeStore.commitUpdateRecipeFromIngredients(this.$store, ingredientStore.readIngredients(this.$store).filter((_ing: IIngredientInstance) => {
+          return _ing.isSelected;
+        }));
         break;
       case 'Recipe':
         recipeStore.commitsetCurrentRecipe(this.$store,item);

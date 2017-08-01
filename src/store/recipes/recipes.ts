@@ -11,6 +11,10 @@ import {
   RecipeInstance,
   RecipeState } from './recipesState';
 import { recipeObjects } from './recipesAPI';
+import {
+  IngredientType,
+  IIngredientInstance
+} from '../ingredients/ingredientsState';
 
 type RecipeContext = ActionContext<RecipeState, RootState>;
 
@@ -39,19 +43,36 @@ export const recipes = {
     },
 
     setRecipes(state: RecipeState, _recipes: Array<IRecipe>) {
-
       let basket = _recipes.map((_rec: IRecipe) => {
         return new RecipeInstance(_rec);
       });
       state.recipes = state.recipes.concat(basket);
     },
 
-    setCurrentRecipe(state: RecipeState, _rec: IRecipeInstance){
+    setCurrentRecipe(state: RecipeState, _recipe: IRecipeInstance){
       if(state.current){
         state.current.isSelected = false;
       }
-      _rec.isSelected = true;
-      state.current = _rec;
+      _recipe.isSelected = true;
+      state.current = _recipe;
+    },
+
+    updateRecipeFromIngredients(state: RecipeState, _ingredients: Array<IIngredientInstance>) {
+      let ingredientKeys = _ingredients.filter((_ing: IIngredientInstance) => {
+        return _ing.ingredient.type = IngredientType.Base;
+      }).map((_ing: IIngredientInstance) => {
+        return _ing.name
+      });
+
+      // if ingredients are the same
+      if(ingredientKeys != state.current.recipe.requiredIngredients){
+        // search for another recipe
+        let newRecipe = state.recipes.find((_recipe: IRecipeInstance) => {
+          return _recipe.recipe.requiredIngredients == ingredientKeys;
+        });
+        // if none set to null else add new recipe
+        state.current = newRecipe ? newRecipe: null;
+      }
     }
   },
 
@@ -77,6 +98,7 @@ const { commit, read, dispatch } =
 export const readRecipes = read(recipes.getters.getRecipes);
 export const readSelectedRecipe = read(recipes.getters.getSelectedRecipe);
 export const commitaddRecipe = commit(recipes.mutations.addRecipe);
+export const commitUpdateRecipeFromIngredients = commit(recipes.mutations.updateRecipeFromIngredients);
 export const commitsetRecipes = commit(recipes.mutations.setRecipes);
 export const commitsetCurrentRecipe= commit(recipes.mutations.setCurrentRecipe);
 export const dispatchRetrieveRecipes = dispatch(recipes.actions.retrieveRecipes);

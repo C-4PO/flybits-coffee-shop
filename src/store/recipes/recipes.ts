@@ -10,7 +10,7 @@ import {
   IRecipeInstance,
   RecipeInstance,
   RecipeState } from './recipesState';
-//import { ingredientObjects } from './recipesAPI';
+import { recipeObjects } from './recipesAPI';
 
 type RecipeContext = ActionContext<RecipeState, RootState>;
 
@@ -19,8 +19,7 @@ export const recipes = {
 
   state: {
     current : null,
-    recipes : [],
-    totalAmount : 0
+    recipes : []
   },
 
   getters: {
@@ -29,53 +28,57 @@ export const recipes = {
       return state.recipes;
     },
     getSelectedRecipe(state: RecipeState) {
-      return state.recipes.filter((rec) => {
-        return rec.isSelected;
-      });
+      return state.current;
     }
   },
 
   mutations: {
-    addRecipes(state: RecipeState, ingredients: Array<IRecipe>) {
 
-      let basket = ingredients.map((_rec: IRecipe) => {
+    addRecipe(state: RecipeState, _recipe: IRecipeInstance ) {
+      state.recipes.push(_recipe);
+    },
+
+    setRecipes(state: RecipeState, _recipes: Array<IRecipe>) {
+
+      let basket = _recipes.map((_rec: IRecipe) => {
         return new RecipeInstance(_rec);
       });
       state.recipes = state.recipes.concat(basket);
     },
 
-    selectRecipe(state: RecipeState, _rec: IRecipeInstance) {
-      let rectemp = state.recipes.find((_element: IRecipeInstance) => {
-        return _element.recipe.name === _rec.recipe.name;
-      });
-      rectemp!.isSelected = !(rectemp!.isSelected);
+    setCurrentRecipe(state: RecipeState, _rec: IRecipeInstance){
+      if(state.current){
+        state.current.isSelected = false;
+      }
+      _rec.isSelected = true;
+      state.current = _rec;
     }
   },
 
   actions: {
-    /*
     async retrieveRecipes(context: RecipeContext) {
       await new Promise((resolve, _) => {
         setTimeout(() => {
-          let Recipes: Array<IRecipe> = ingredientObjects.map((_rec: any) => {
+          let Recipes: Array<IRecipe> = recipeObjects.map((_rec: any) => {
             return new Recipe(_rec);
           });
-          commitaddRecipes(context, Recipes);
+          commitsetRecipes(context, Recipes);
           resolve();
         }, 500);
       });
     }
-    */
+
   }
 };
 
 const { commit, read, dispatch } =
-  getStoreAccessors<RecipeState, RootState>('ingredients');
+  getStoreAccessors<RecipeState, RootState>('recipes');
 
 export const readRecipes = read(recipes.getters.getRecipes);
 export const readSelectedRecipe = read(recipes.getters.getSelectedRecipe);
-export const commitaddRecipes= commit(recipes.mutations.addRecipes);
-export const commitSelectRecipe = commit(recipes.mutations.selectRecipe);
-//export const dispatchRetrieveRecipes = dispatch(recipes.actions.retrieveRecipes);
+export const commitaddRecipe = commit(recipes.mutations.addRecipe);
+export const commitsetRecipes = commit(recipes.mutations.setRecipes);
+export const commitsetCurrentRecipe= commit(recipes.mutations.setCurrentRecipe);
+export const dispatchRetrieveRecipes = dispatch(recipes.actions.retrieveRecipes);
 
 

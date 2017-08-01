@@ -61,6 +61,6 @@ export class RecipeInstance implements IListable, IRecipeInstance {
 }
 
 export interface RecipeState {
+  current?: IRecipeInstance;
   recipes: Array<IRecipeInstance>;
-  totalAmount: number;
 }

@@ -4,6 +4,7 @@ import Vuex from 'vuex';
 
 import * as Store from './store';
 import * as IngredientsStore from './store/ingredients';
+import * as RecipeStore from './store/recipes';
 
 import { HomeComponent } from './components/home';
 import { DrinkComponent } from './components/drinks';
@@ -35,5 +36,6 @@ new Vue({
   },
   created: function() {
     IngredientsStore.dispatchRetrieveIngredients(this.$store);
+    RecipeStore.dispatchRetrieveRecipes(this.$store);
   }
 });

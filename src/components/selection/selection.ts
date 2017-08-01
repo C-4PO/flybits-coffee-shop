@@ -33,4 +33,8 @@ export default class SelectionComponent extends Vue {
     });
     return Number((p).toFixed(2));
   }
+
+  itemSelected(item : IIngredientInstance): void {
+    ingredientStore.commitSelectIngredient(this.$store,item);
+  }
 }

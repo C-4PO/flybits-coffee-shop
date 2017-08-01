@@ -5,11 +5,19 @@ import Component from 'vue-class-component';
 import TabsComponent from './../tabs/tabs';
 import ListComponent from './../list/list';
 
-// Store
+// List
+import { IListable } from './../../store/shared/sharedState';
+
+// IngredientStore
 import * as ingredientStore from './../../store/ingredients';
 import { IIngredientInstance } from './../../store/ingredients/ingredientsState';
 import { IngredientType } from './../../store/ingredients/ingredientsState';
-import { IListable } from './../../store/shared/sharedState';
+
+
+// RecipeStore
+import * as recipeStore from './../../store/recipes';
+import IRecipeInstance from './../../store/recipes/recipesState';
+
 
 @Component({
   template: require('./menu.html'),
@@ -24,10 +32,15 @@ export default class MenuComponent extends Vue {
   index: number = 1;
   selectedTab: string = 'Ingredients';
 
+  get group(): Array<IListable> {
+    let selectedGroup = this.groups[this.selectedTab];
+    return selectedGroup ? selectedGroup : [];
+  }
+
   get groups() {
     // Could get groups from a more complex api
     return {
-      'Recipe': [],
+      'Recipe': recipeStore.readRecipes(this.$store),
       'Ingredients': ingredientStore.readIngredients(this.$store).filter((_ing: IIngredientInstance) => {
         return _ing.ingredient.type === IngredientType.Base && !_ing.isSelected;
       }),
@@ -37,13 +50,17 @@ export default class MenuComponent extends Vue {
     };
   };
 
-  get group(): Array<IListable> {
-    let selectedGroup = this.groups[this.selectedTab];
-    return selectedGroup ? selectedGroup : [];
-  }
-
-  get ingredients(): Array<IIngredientInstance> {
-    return ingredientStore.readIngredients(this.$store);
+  itemSelected(item : any): void {
+    switch (this.selectedTab) {
+      case 'AddOns':
+      case 'Ingredients':
+        ingredientStore.commitSelectIngredient(this.$store,item);
+        break;
+      case 'Recipe':
+        recipeStore.commitsetCurrentRecipe(this.$store,item);
+        ingredientStore.commitSetIngredientsByRecipe(this.$store,item);
+        break;
+    }
   }
 
   tabSwitch(tab): void {

@@ -8,7 +8,7 @@
         </fbcs-tabs>
       </div>
       <div class="menu-list">
-        <fbcs-list v-bind:items="group"></fbcs-list>
+        <fbcs-list v-bind:items="group" v-on:itemSelect="itemSelected"></fbcs-list>
       </div>
     </div>
   </div>

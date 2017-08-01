@@ -6,11 +6,9 @@ import * as Store from './store';
 import * as IngredientsStore from './store/ingredients';
 import * as RecipeStore from './store/recipes';
 
-import { HomeComponent } from './components/home';
 import { DrinkComponent } from './components/drinks';
 import { PurchaseComponent } from './components/purchase';
 import { ExitComponent } from './components/exit';
-import { NavbarComponent } from './components/navbar';
 
 // register the plugin
 Vue.use(VueRouter);
@@ -20,8 +18,7 @@ const store = Store.createStore();
 
 let router = new VueRouter({
   routes: [
-    { path: '/', component: HomeComponent },
-    { path: '/drinks', component: DrinkComponent },
+    { path: '/', component: DrinkComponent },
     { path: '/purchase', component: PurchaseComponent },
     { path: '/exit', component: ExitComponent}
   ]
@@ -32,7 +29,6 @@ new Vue({
   router: router,
   store,
   components: {
-    'navbar': NavbarComponent
   },
   created: function() {
     IngredientsStore.dispatchRetrieveIngredients(this.$store);

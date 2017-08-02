@@ -28,8 +28,7 @@ export const order = {
   namespaced: true,
 
   state: {
-    order: new Order(),
-    currentDrinkIndex: 0
+    order: new Order()
   },
 
   getters: {
@@ -38,11 +37,11 @@ export const order = {
   mutations: {
 
     setRecipe(state: OrderState, _recipe: IRecipe): void {
-      this.currentDrink.recipe = _recipe;
+      state.order.drinks[0].recipe = _recipe;
     },
 
-    setIngredients(state: OrderState, _Ingredients: Array<IIngredient>): void {
-
+    setIngredients(state: OrderState, _ingredients: Array<IIngredient>): void {
+      state.order.drinks[0].ingredients = _ingredients;
     },
     setPurchase(state: OrderState, _purchase: IPurchase) {
       state.order.purchaseInfo = _purchase;
@@ -62,6 +61,7 @@ export const order = {
 
     async makeOrder(context: OrderContext) {
       await new Promise((resolve, _) => {
+        // send order object to API
         setTimeout(() => {
           commitSetFinalized(context);
           resolve();
@@ -83,8 +83,8 @@ export const commitaddRecipe = commit(recipes.mutations.addRecipe);
 export const dispatchRetrieveRecipes = dispatch(recipes.actions.retrieveRecipes);
 */
 
-export const commitToggleIngredient = commit(order.mutations.setIngredients);
 export const commitSetRecipe = commit(order.mutations.setRecipe);
+export const commitSetIngredients = commit(order.mutations.setIngredients);
 export const commitSetPurchase = commit(order.mutations.setPurchase);
 export const commitSetUser = commit(order.mutations.setUser);
 export const commitSetFinalized = commit(order.mutations.setFinalized);

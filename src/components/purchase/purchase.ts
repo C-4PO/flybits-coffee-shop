@@ -4,10 +4,17 @@ import Component from 'vue-class-component';
 // Components
 import ListComponent from './../list/list';
 
-// IngredientStore
 import * as ingredientStore from './../../store/ingredients';
-// RecipeStore
 import * as recipeStore from './../../store/recipes';
+import * as orderStore from './../../store/order';
+
+import {
+  IPurchase,
+  IUser,
+  Purchase,
+  User
+} from "./../../store/order/orderState";
+
 
 @Component({
   template: require('./purchase.html'),
@@ -17,6 +24,9 @@ import * as recipeStore from './../../store/recipes';
 
 })
 export class PurchaseComponent extends Vue {
+
+  purchase: IPurchase = new Purchase();
+  user: IUser = new User();
 
   get ingredients(){
     return ingredientStore.readSelectedIngredients(this.$store);
@@ -37,10 +47,13 @@ export class PurchaseComponent extends Vue {
     return recipeStore.readSelectedRecipe(this.$store);
   }
 
-  /*
-  get selectedRecipe(){
-
-  }*/
+  finish(): void {
+    // If all the form elements are filled
+    orderStore.commitSetPurchase(this.$store,this.purchase);
+    orderStore.commitSetUser(this.$store,this.user);
+    orderStore.dispatchMakeOrder(this.$store);
+    this.$router.push('exit');
+  }
 
 
 }

@@ -23,10 +23,8 @@
           <h1 class="text-center">${{price}}</h1>
           <div class="selection-order">
             <div class="btn-group btn-group-justified" role="group" aria-label="...">
-              <div class="btn-group" role="group">
-                <router-link to="purchase">
-                  <button type="button" class="btn btn-default">Order</button>
-                </router-link>
+              <div class="btn-group" role="group" >
+                <button type="button" v-on:click="check()" class="btn btn-default">Order</button>
               </div>
             </div>
           </div>

@@ -114,7 +114,7 @@ export class Order implements IOrder {
   constructor() {
     this._id = Math.random();
     this._date = new Date();
-    this.drinks = [];
+    this.drinks = [new Drink()];
   }
 
   get id(): number {
@@ -128,5 +128,4 @@ export class Order implements IOrder {
 
 export interface OrderState {
   order: IOrder;
-  currentDrinkIndex: number;
 }

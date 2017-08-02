@@ -4,11 +4,13 @@
 import * as Vuex from 'vuex';
 import { ingredients } from './ingredients';
 import { recipes } from './recipes';
+import { order } from './order';
 import { State } from './state';
 
 export const createStore = () => new Vuex.Store<State>({
   modules: {
     ingredients,
-    recipes
+    recipes,
+    order
   }
 });
